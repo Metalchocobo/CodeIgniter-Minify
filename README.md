@@ -1,15 +1,15 @@
 CodeIgniter Minify
-------------------
+==================
 
 A library that provides minify functions using CodeIgniter drivers. The library detects the file extension and will call the right driver to minify that file. By default a javascript en css driver is included, but custom drivers can be added.
 
 Installation
-============
+------------
 
 Place the Minify folder in your application's libraries folder.
 
 Usage
-=====
+-----
 
 Use direct drivers access to minify content:
 
