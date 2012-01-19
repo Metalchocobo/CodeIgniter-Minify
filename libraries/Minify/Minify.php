@@ -128,9 +128,6 @@ class Minify extends CI_Driver_Library {
      * @return string
      */
     public function delete($resource) {
-        $params = func_get_args();
-        $resource = reset($params);
-        
         // remove the base url
         $resource = str_ireplace($this->ci->config->item('base_url'), '', $resource);
         
