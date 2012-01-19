@@ -36,6 +36,9 @@ class Minify extends CI_Driver_Library {
     // number of seconds a minified file should be cached, default: 1 week
     public $expire = 604800;
     
+    // add base path to the cache path
+    public $add_base_path = TRUE;
+    
     private $ci;
     
     // allowed drivers, for custom drivers: add to this array
@@ -48,7 +51,8 @@ class Minify extends CI_Driver_Library {
     
     /**
      * Minify a file, the minified content is returned
-     * @return string
+     * @param string source
+     * @return string minifed
      */
     public function min() {
         $params = func_get_args();
@@ -59,7 +63,7 @@ class Minify extends CI_Driver_Library {
         $driver = $path_info['extension'];
         
         // get source code
-        $source = @file_get_contents($resource);
+        $source = @read_file($resource);
         if($source === FALSE)
             show_error("File does not exist: ".$resource);
         
@@ -72,11 +76,15 @@ class Minify extends CI_Driver_Library {
     
     /**
      * Minify and cache a file, the location of the cache file will be returned
-     * @return string
+     * @param string file
+     * @return string cache path
      */
     public function cache() {
         $params = func_get_args();
         $resource = reset($params);
+        
+        // remove the base url for now, we will add it again later
+        $resource = str_ireplace($this->ci->config->item('base_url'), '', $resource);
         
         // only cache local files
         if(stristr($resource, 'http://'))
@@ -108,8 +116,45 @@ class Minify extends CI_Driver_Library {
                 return $resource;
         }
         
-        return $cache_file;
+        if($this->add_base_path)
+            return $this->ci->config->item('base_url') . $cache_file;
+        else
+            return $cache_file;
     }
+    
+	/**
+     * Delete cache a file
+     * @param file
+     * @return string
+     */
+    public function delete($resource) {
+        $params = func_get_args();
+        $resource = reset($params);
+        
+        // remove the base url
+        $resource = str_ireplace($this->ci->config->item('base_url'), '', $resource);
+        
+        // can't remove remote resources
+        if(stristr($resource, 'http://'))
+            return FALSE;
+        
+        // generate cache path & filename
+        $path_info = pathinfo($resource);
+        if($this->cache_path != '') {
+            $cache_file = rtrim($this->cache_path, '/') . '/' . $path_info['filename'] . '.min.' . $path_info['extension'];
+        }
+        else {
+            $path_parts = explode('/', $resource);
+            array_pop($path_parts); // remove filename from path
+            $cache_file = implode('/', $path_parts) . '/' . $path_info['filename'] . '.min.' . $path_info['extension'];
+        }
+        
+        // delete the cache file
+        if(file_exists($cache_file))
+            return @unlink($cache_file);
+        
+        return FALSE;
+    } 
 }
 
 abstract class Minify_Driver extends CI_Driver {
