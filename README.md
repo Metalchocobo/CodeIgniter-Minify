@@ -29,16 +29,3 @@ If you want to minify an existing file you can use the global `min()` function. 
 	
 	// minify a file
 	$minified = $this->minify->min('path/to/file');
-	
-If you want to minify an existing file, and automatically create a cache file you can use the global `cache()` function. This function returns the location of the cached file.
-
-	// load the driver
-	$this->load->driver('minify');
-	
-	// minify a file
-	$path = $this->minify->cache('path/to/file');
-	
-You can use this list function in your view files like this:
-
-	<link rel="stylesheet" href="<?php echo $this->minify->cache(base_url('css/stylesheet.css')); ?>" />
-	<script type="text/javascript" src="<?php echo $this->minify->cache(base_url('javascript/script.js')); ?>"></script>
