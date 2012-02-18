@@ -6,7 +6,7 @@ A library that provides minify functions using CodeIgniter drivers. The library 
 Installation
 ------------
 
-Place the Minify folder in your application's libraries folder.
+Place the Minify folder in your application's libraries folder (or use spark).
 
 Usage
 -----
