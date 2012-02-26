@@ -3,7 +3,7 @@
  * @name		CodeIgniter Minify
  * @author		Jens Segers
  * @link		http://www.jenssegers.be
- * @license		MIT License Copyright (c) 2011 Jens Segers
+ * @license		MIT License Copyright (c) 2012 Jens Segers
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,7 @@ class Minify extends CI_Driver_Library {
     
     /**
      * Minify a file, the minified content is returned
+     * 
      * @param string source
      * @return string minifed
      */
@@ -62,7 +63,7 @@ class Minify extends CI_Driver_Library {
             // get source code
             $source = @read_file($resource);
             if ($source === FALSE) {
-                show_error("File does not exist: " . $resource);
+                show_error('File does not exist: ' . $resource);
             }
             
             // add source to params
@@ -83,6 +84,7 @@ abstract class Minify_Driver extends CI_Driver {
     
     /**
      * Driver specific minify function
+     * 
      * @param string $resource
      */
     abstract public function min($resource);
